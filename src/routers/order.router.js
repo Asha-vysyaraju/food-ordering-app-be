@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import handler from 'express-async-handler';
 
-import { BAD_REQUEST } from '../constants/httpStatus.js';
+import { BAD_REQUEST,UNAUTHORIZED } from '../constants/httpStatus.js';
 import { OrderModel } from '../models/order.model.js';
 import { OrderStatus } from '../constants/orderStatus.js';
 import { UserModel } from '../models/user.model.js';
@@ -18,11 +18,10 @@ router.post(
   handler(async (req, res) => {
     const order = req.body;
    console.log(order)
-    //  if (order.items.length === 0) {
-    //   return res.status(BAD_REQUEST).send('Cart Is Empty!');
+     if (order.items.length === 0) 
+       return res.status(BAD_REQUEST).send('Cart Is Empty!');
     
-    // }
-    // else{
+   
     const id= (req.user.id)
     await OrderModel.deleteOne({
       user: req.user.id,
@@ -88,7 +87,25 @@ router.get(
   })
 );
 
+router.get('/allstatus', (req, res) => {
+  const allStatus = Object.values(OrderStatus);
+  res.send(allStatus);
+});
 
+router.get(
+  '/:status?',
+  handler(async (req, res) => {
+    const status = req.params.status;
+    const user = await UserModel.findById(req.user.id);
+    const filter = {};
+
+    if (!user.isAdmin) filter.user = user._id;
+    if (status) filter.status = status;
+
+    const orders = await OrderModel.find(filter).sort('-createdAt');
+    res.send(orders);
+  })
+);
 
 
 const getNewOrderForCurrentUser = async req=>
