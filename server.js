@@ -2,10 +2,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import cors from 'cors'
-import foodRouter from './routers/food.router.js';
-import userRouter from './routers/user.router.js';
-import { dbconnect } from './config/database.config.js';
-import orderRouter from './routers/order.router.js';
+import foodRouter from './src/routers/food.router.js';
+import userRouter from './src/routers/user.router.js';
+import { dbconnect } from './src/config/database.config.js';
+import orderRouter from './src/routers/order.router.js';
 
 dbconnect();
 const app=express();
