@@ -65,7 +65,7 @@ router.put(
       { new: true }
     );
 
-    res.send(generateTokenResponse(user));
+   return res.send(generateTokenResponse(user));
   })
 );
 

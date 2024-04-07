@@ -6,6 +6,7 @@ import foodRouter from './src/routers/food.router.js';
 import userRouter from './src/routers/user.router.js';
 import { dbconnect } from './src/config/database.config.js';
 import orderRouter from './src/routers/order.router.js';
+import uploadRouter from './src/routers/upload.router.js';
 
 dbconnect();
 const app=express();
@@ -24,6 +25,7 @@ app.use(
   app.use('/api/foods', foodRouter);
   app.use('/api/users', userRouter);
   app.use('/api/orders', orderRouter);
+  app.use('/api/upload', uploadRouter);
   const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log('listening on port ' + PORT);

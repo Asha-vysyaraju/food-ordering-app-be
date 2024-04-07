@@ -5,10 +5,10 @@ import { BAD_REQUEST,UNAUTHORIZED } from '../constants/httpStatus.js';
 import { OrderModel } from '../models/order.model.js';
 import { OrderStatus } from '../constants/orderStatus.js';
 import { UserModel } from '../models/user.model.js';
-import mongoose from "mongoose";
+
 
 import auth from '../middleware/auth.js'
-// const { ObjectId } = mongoose.Types;
+
 
 const router = Router();
  router.use(auth);
@@ -50,9 +50,9 @@ router.put(
     order.status = OrderStatus.PAYED;
     await order.save();
 
-    // sendEmailReceipt(order);
+   
 
-    res.send(order._id);
+   return res.send(order._id);
   })
 );
 
@@ -89,7 +89,7 @@ router.get(
 
 router.get('/allstatus', (req, res) => {
   const allStatus = Object.values(OrderStatus);
-  res.send(allStatus);
+ return res.send(allStatus);
 });
 
 router.get(
@@ -103,7 +103,7 @@ router.get(
     if (status) filter.status = status;
 
     const orders = await OrderModel.find(filter).sort('-createdAt');
-    res.send(orders);
+   return res.send(orders);
   })
 );
 
