@@ -22,8 +22,12 @@ This Pixelpalate app is a food ordering and management app where user can order 
 API ENDPOINTS:
 SERVER LINK:https://food-ordering-app-be-5g8s.onrender.com
 
+API DOCUMENTATION in Postman Docs:https://documenter.getpostman.com/view/33428479/2sA35MyJZM#8831d0c5-7668-47f3-845e-3c9a84ffac45
+
 Food related apis:https://food-ordering-app-be-5g8s.onrender.com/api/foods
+
 users related apis:https://food-ordering-app-be-5g8s.onrender.com/api/users
+
 Orders related:https://food-ordering-app-be-5g8s.onrender.com/api/orders
 
 
