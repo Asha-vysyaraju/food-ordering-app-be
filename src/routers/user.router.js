@@ -7,7 +7,7 @@ import handler from 'express-async-handler';
 import { UserModel } from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import auth from '../middleware/auth.js';
-// import admin from '../middleware/admin.mid.js';
+import admin from '../middleware/admin.js';
 const PASSWORD_HASH_SALT_ROUNDS = 10;
 
 router.post(
@@ -95,65 +95,59 @@ router.put(
   })
 );
 
-// router.get(
-//   '/getall/:searchTerm?',
-//   admin,
-//   handler(async (req, res) => {
-//     const { searchTerm } = req.params;
+router.get(
+  '/getall',
+  admin,
+  handler(async (req, res) => {
+ const users = await UserModel.find( {});
+   return res.send(users);
+  })
+);
 
-//     const filter = searchTerm
-//       ? { name: { $regex: new RegExp(searchTerm, 'i') } }
-//       : {};
+router.put(
+  '/toggleBlock/:userId',
+  admin,
+  handler(async (req, res) => {
+    const { userId } = req.params;
 
-//     const users = await UserModel.find(filter, { password: 0 });
-//     res.send(users);
-//   })
-// );
+    if (userId === req.user.id) {
+      res.status(BAD_REQUEST).send("Can't block yourself!");
+      return;
+    }
 
-// router.put(
-//   '/toggleBlock/:userId',
-//   admin,
-//   handler(async (req, res) => {
-//     const { userId } = req.params;
+    const user = await UserModel.findById(userId);
+    user.isBlocked = !user.isBlocked;
+    user.save();
 
-//     if (userId === req.user.id) {
-//       res.status(BAD_REQUEST).send("Can't block yourself!");
-//       return;
-//     }
+    return res.send(user.isBlocked);
+  })
+);
 
-//     const user = await UserModel.findById(userId);
-//     user.isBlocked = !user.isBlocked;
-//     user.save();
+router.get(
+  '/getById/:userId',
+  admin,
+  handler(async (req, res) => {
+    const { userId } = req.params;
+    const user = await UserModel.findById(userId, { password: 0 });
+    return res.send(user);
+  })
+);
 
-//     res.send(user.isBlocked);
-//   })
-// );
+router.put(
+  '/update',
+  admin,
+  handler(async (req, res) => {
+    const { id, name, email, address, isAdmin } = req.body;
+    await UserModel.findByIdAndUpdate(id, {
+      name,
+      email,
+      address,
+      isAdmin,
+    });
 
-// router.get(
-//   '/getById/:userId',
-//   admin,
-//   handler(async (req, res) => {
-//     const { userId } = req.params;
-//     const user = await UserModel.findById(userId, { password: 0 });
-//     res.send(user);
-//   })
-// );
-
-// router.put(
-//   '/update',
-//   admin,
-//   handler(async (req, res) => {
-//     const { id, name, email, address, isAdmin } = req.body;
-//     await UserModel.findByIdAndUpdate(id, {
-//       name,
-//       email,
-//       address,
-//       isAdmin,
-//     });
-
-//     res.send();
-//   })
-// );
+   return res.send();
+  })
+);
 
 const generateTokenResponse = user => {
   const token = jwt.sign(
