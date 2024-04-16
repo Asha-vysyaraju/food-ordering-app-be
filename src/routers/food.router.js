@@ -103,7 +103,7 @@ router.get(
   
       await food.save();
   
-      res.send(food);
+     return res.send(food);
     })
   );
 
@@ -127,7 +127,7 @@ router.get(
         }
       );
   
-      res.send();
+     return res.send();
     })
   );
 

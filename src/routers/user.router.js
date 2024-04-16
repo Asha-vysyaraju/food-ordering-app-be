@@ -17,11 +17,11 @@ router.post(
     const user = await UserModel.findOne({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      res.send(generateTokenResponse(user));
-      return;
+      return res.send(generateTokenResponse(user));
+      
     }
 
-    res.status(BAD_REQUEST).send('Username or password is invalid');
+   return res.status(BAD_REQUEST).send('Username or password is invalid');
   })
 );
 
@@ -33,8 +33,8 @@ router.post(
     const user = await UserModel.findOne({ email });
 
     if (user) {
-      res.status(BAD_REQUEST).send('User already exists, please login!');
-      return;
+     return res.status(BAD_REQUEST).send('User already exists, please login!');
+      
     }
 
     const hashedPassword = await bcrypt.hash(
@@ -50,7 +50,7 @@ router.post(
     };
 
     const result = await UserModel.create(newUser);
-    res.send(generateTokenResponse(result));
+   return res.send(generateTokenResponse(result));
   })
 );
 
@@ -77,21 +77,21 @@ router.put(
     const user = await UserModel.findById(req.user.id);
 
     if (!user) {
-      res.status(BAD_REQUEST).send('Change Password Failed!');
-      return;
+     return res.status(BAD_REQUEST).send('Change Password Failed!');
+      
     }
 
     const equal = await bcrypt.compare(currentPassword, user.password);
 
     if (!equal) {
-      res.status(BAD_REQUEST).send('Current Password Is Not Correct!');
-      return;
+     return res.status(BAD_REQUEST).send('Current Password Is Not Correct!');
+      
     }
 
     user.password = await bcrypt.hash(newPassword, PASSWORD_HASH_SALT_ROUNDS);
     await user.save();
 
-    res.send();
+   return res.send();
   })
 );
 
@@ -111,8 +111,8 @@ router.put(
     const { userId } = req.params;
 
     if (userId === req.user.id) {
-      res.status(BAD_REQUEST).send("Can't block yourself!");
-      return;
+     return res.status(BAD_REQUEST).send("Can't block yourself!");
+      
     }
 
     const user = await UserModel.findById(userId);

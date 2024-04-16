@@ -15,8 +15,8 @@ router.post(
   handler(async (req, res) => {
     const file = req.file;
     if (!file) {
-      res.status(BAD_REQUEST).send();
-      return;
+     return res.status(BAD_REQUEST).send();
+      
     }
 
     const imageUrl = await uploadImageToCloudinary(req.file?.buffer);

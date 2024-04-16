@@ -23,10 +23,10 @@ router.post(
     
    
     const id= (req.user.id)
-    await OrderModel.deleteOne({
-      user: req.user.id,
-      status: OrderStatus.NEW,
-    });
+    // await OrderModel.deleteOne({
+    //   user: req.user.id,
+    //   status: OrderStatus.NEW,
+    // });
    
     const newOrder = new OrderModel({ ...order, user: req.user.id });
     await newOrder.save();
@@ -42,8 +42,8 @@ router.put(
     const { paymentId } = req.body;
     const order = await getNewOrderForCurrentUser(req);
     if (!order) {
-      res.status(BAD_REQUEST).send('Order Not Found!');
-      return;
+    return  res.status(BAD_REQUEST).send('Order Not Found!');
+      
     }
 
     order.paymentId = paymentId;
